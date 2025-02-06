@@ -7,44 +7,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ENT;
+using System.Configuration;
 
 namespace DAL
 {
     public class UsuariosDAL
         
     {
+        private string claveDefault = ConfigurationManager.AppSettings["ClaveDefault"];
+        private string fraseSecreta = ConfigurationManager.AppSettings["FraseSecreta"];
 
-        
 
         public (int?, string) ValidarCredenciales(string correo, string contrasena)
         {
             int? idUsuario = null;
             string nombreUsuario = null;
 
-            using (SqlConnection con = Conexion.ObtenerConexion()) // Aquí se utiliza la conexión que ya tienes configurada
+            using (SqlConnection con = Conexion.ObtenerConexion()) 
             {
                 using (SqlCommand cmd = new SqlCommand("sp_LoginUsuario", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@CorreoElectronico", correo);
-                    cmd.Parameters.AddWithValue("@Contrasena", contrasena);
-                    cmd.Parameters.AddWithValue("@FraseSecreta", "Master"); // Ajusta esto según corresponda
+                    cmd.Parameters.AddWithValue("@Contrasena", claveDefault);
+                    cmd.Parameters.AddWithValue("@FraseSecreta", fraseSecreta); 
 
                     con.Open();
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
-                        idUsuario = reader.GetInt32(0); // IdUsuario
-                        nombreUsuario = reader.GetString(1); // Nombre
+                        idUsuario = reader.GetInt32(0); 
+                        nombreUsuario = reader.GetString(1); 
                     }
                 }
             }
             return (idUsuario, nombreUsuario);
         }
-
-
-
-        
 
 
 
@@ -61,9 +59,8 @@ namespace DAL
                 cmd.Parameters.AddWithValue("@ApellidoMaterno", apellidoMaterno);
                 cmd.Parameters.AddWithValue("@FechaNacimiento", fechaNacimiento);
                 cmd.Parameters.AddWithValue("@CorreoElectronico", correoElectronico);
-                cmd.Parameters.AddWithValue("@Contrasena", contrasena);
+                cmd.Parameters.AddWithValue("@Contrasena", claveDefault);
                 cmd.Parameters.AddWithValue("@FraseSecreta", fraseSecreta);
-
 
 
                 conn.Open();
