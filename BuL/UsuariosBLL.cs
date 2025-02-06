@@ -2,10 +2,13 @@
 using ENT;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace BLL
 {
@@ -19,15 +22,12 @@ namespace BLL
             usuarioDAL = new UsuariosDAL();
         }
 
-        public Usuarios Login(string correo, string contrasena)
+
+        public (int? IdUsuario, string NombreUsuario) ValidarCredenciales(string correo, string contrasena)
         {
-            return usuarioDAL.Login(correo, contrasena);
+            return new UsuariosDAL().ValidarCredenciales(correo, contrasena);
         }
 
-        public int? ValidarCredenciales(string correo, string contrasena)
-        {
-            return UsuariosDAL.ValidarUsuario(correo, contrasena);
-        }
 
         public void RegistrarUsuario(string nombre, string apellidoPaterno, string apellidoMaterno, DateTime fechaNacimiento, string correo, string contrasena,string frase)
         {
@@ -42,20 +42,6 @@ namespace BLL
         public ENT.Usuarios ObtenerUsuarioPorId(int idUsuario)
         {
             return usuarioDAL.ObtenerUsuarioPorId(idUsuario);
-        }
-
-        public byte[] HashPassword(string password, byte[] salt)
-        {
-            using (var sha512 = new SHA512Managed())
-            {
-                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-                byte[] combinedBytes = new byte[passwordBytes.Length + salt.Length];
-
-                Buffer.BlockCopy(salt, 0, combinedBytes, 0, salt.Length);
-                Buffer.BlockCopy(passwordBytes, 0, combinedBytes, salt.Length, passwordBytes.Length);
-
-                return sha512.ComputeHash(combinedBytes);
-            }
         }
 
     }

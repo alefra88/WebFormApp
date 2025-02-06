@@ -1,7 +1,8 @@
 ﻿<%@ Page Title="Inicio" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="WebFormApp.Default" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container">
-        <h2>Bienvenido al Panel de Administración</h2>
+        <asp:Label ID="lblBienvenida" runat="server" Font-Bold="true" Font-Size="Large"></asp:Label>
+
 
         <p>Seleccione una de las opciones:</p>
 

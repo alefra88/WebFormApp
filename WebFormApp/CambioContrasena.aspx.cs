@@ -1,4 +1,5 @@
 ﻿using BLL;
+using DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,25 +22,31 @@ namespace WebFormApp
             }
         }
 
-        protected void btnGuardar_Click(object sender, EventArgs e)
+
+        protected void btnCambiarContrasena_Click(object sender, EventArgs e)
         {
-            string nuevaContrasena = txtNuevaContrasena.Text;
-            string confirmarContrasena = txtConfirmarContrasena.Text;
-
-            if (string.IsNullOrEmpty(nuevaContrasena) || nuevaContrasena.Length < 6)
+            try
             {
-                Response.Write("<script>alert('La contraseña debe tener al menos 6 caracteres.');</script>");
-                return;
-            }
+                // Obtener los valores del formulario
+                int idUsuario = Convert.ToInt32(Session["UsuarioId"]); // Asegúrate de convertir a int
+                string nuevaContrasena = txtNuevaContrasena.Text.Trim();
+                string fraseSecreta = "Master"; // O la frase secreta que determines
 
-            if (nuevaContrasena != confirmarContrasena)
+                // Llamar al método para cambiar la contraseña
+                UsuariosDAL usuariosDAL = new UsuariosDAL();
+                usuariosDAL.CambiarContrasena(idUsuario, nuevaContrasena, fraseSecreta);
+
+                // Redirigir o mostrar mensaje de éxito
+                Response.Redirect("Default.aspx");
+            }
+            catch (Exception ex)
             {
-                Response.Write("<script>alert('Las contraseñas no coinciden.');</script>");
-                return;
+                
             }
-
-            
         }
+
+
+
     }
 
 }

@@ -14,102 +14,37 @@ namespace DAL
         
     {
 
-        public Usuarios Login(string correo, string contrasena)
-        {
-            Usuarios usuario = null;
+        
 
-            using (SqlConnection conn = Conexion.ObtenerConexion())
-            {
-                SqlCommand cmd = new SqlCommand("sp_LoginUsuario", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@CorreoElectronico", correo);
-                cmd.Parameters.AddWithValue("@Contrasena", contrasena);
-
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    byte[] salt = (byte[])reader["Salt"];
-                    byte[] contrasenaHashAlmacenada = (byte[])reader["ContrasenaHash"];
-
-                    // Comparar el hash de la contraseña ingresada + salt con el hash almacenado
-                    if (GenerarHash(contrasena, salt).SequenceEqual(contrasenaHashAlmacenada))
-                    {
-                        usuario = new Usuarios
-                        {
-                            IdUsuario = (int)reader["IdUsuario"],
-                            Nombre = reader["Nombre"].ToString(),
-                            ApellidoPaterno = reader["ApellidoPaterno"].ToString(),
-                            ApellidoMaterno = reader["ApellidoMaterno"].ToString(),
-                            CorreoElectronico = reader["CorreoElectronico"].ToString(),
-                            FechaRegistro = (DateTime)reader["FechaRegistro"]
-                        };
-                    }
-                    else
-                    {
-                        throw new Exception("Contraseña incorrecta.");
-                    }
-                }
-                else
-                {
-                    throw new Exception("Usuario no encontrado.");
-                }
-            }
-
-            return usuario;
-        }
-
-
-
-        public static int? ValidarUsuario(string correo, string contrasena)
+        public (int?, string) ValidarCredenciales(string correo, string contrasena)
         {
             int? idUsuario = null;
-            string phrase = "Master";
-            try
+            string nombreUsuario = null;
+
+            using (SqlConnection con = Conexion.ObtenerConexion()) // Aquí se utiliza la conexión que ya tienes configurada
             {
-                using (SqlConnection connection = Conexion.ObtenerConexion()) 
+                using (SqlCommand cmd = new SqlCommand("sp_LoginUsuario", con))
                 {
-                    SqlCommand cmd = new SqlCommand("sp_ValidarUsuario", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@CorreoElectronico", correo);
                     cmd.Parameters.AddWithValue("@Contrasena", contrasena);
-                    cmd.Parameters.AddWithValue("@FraseSecreta", phrase);
+                    cmd.Parameters.AddWithValue("@FraseSecreta", "Master"); // Ajusta esto según corresponda
 
-                    connection.Open();
-
+                    con.Open();
                     SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.HasRows)
+                    if (reader.Read())
                     {
-                        reader.Read();
-                        idUsuario = reader.GetInt32(0);  // Retorna el IdUsuario
+                        idUsuario = reader.GetInt32(0); // IdUsuario
+                        nombreUsuario = reader.GetString(1); // Nombre
                     }
-                    reader.Close();
                 }
             }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al validar el usuario: " + ex.Message);
-            }
-
-            return idUsuario;
+            return (idUsuario, nombreUsuario);
         }
 
 
 
-        private byte[] GenerarHash(string contrasena, byte[] salt)
-        {
-            using (SHA512 sha512 = SHA512.Create())
-            {
-                byte[] contrasenaBytes = Encoding.UTF8.GetBytes(contrasena);
-                byte[] combinedBytes = new byte[contrasenaBytes.Length + salt.Length];
-
-                Buffer.BlockCopy(salt, 0, combinedBytes, 0, salt.Length);
-                Buffer.BlockCopy(contrasenaBytes, 0, combinedBytes, salt.Length, contrasenaBytes.Length);
-
-                return sha512.ComputeHash(combinedBytes);
-            }
-        }
+        
 
 
 
@@ -135,6 +70,7 @@ namespace DAL
                 cmd.ExecuteNonQuery();
             }
         }
+        
 
         public List<Usuarios> ListarUsuarios()
         {
@@ -194,6 +130,22 @@ namespace DAL
             return usuario;
         }
 
-        
+        public void CambiarContrasena(int idUsuario, string nuevaContrasena, string fraseSecreta)
+        {
+            using (SqlConnection con = Conexion.ObtenerConexion())
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_CambiarContrasena", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                    cmd.Parameters.AddWithValue("@NuevaContrasena", nuevaContrasena);
+                    cmd.Parameters.AddWithValue("@FraseSecreta", fraseSecreta);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
     }
 }

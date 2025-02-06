@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Usuarios.aspx.cs" Inherits="WebFormApp.Usuarios" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
  <div class="container">
-        <h2>Usuarios Registrados</h2>
 
         <asp:GridView ID="gvUsuarios" runat="server" CssClass="table table-striped" AutoGenerateColumns="False" OnRowCommand="gvUsuarios_RowCommand">
             <Columns>

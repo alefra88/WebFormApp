@@ -6,17 +6,20 @@ namespace WebFormApp
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Aquí podrías agregar algún código para mostrar el nombre de usuario si está en sesión
             if (Session["UsuarioNombre"] != null)
             {
-                // Mostrar el saludo o realizar otras acciones
+                lblBienvenida.Text = "Bienvenido, " + Session["UsuarioNombre"].ToString() + "!";
+            }
+            else
+            {
+                Response.Redirect("~/Login2.aspx"); // Redirigir si no hay sesión activa
             }
         }
 
         protected void btnCrearUsuario_Click(object sender, EventArgs e)
         {
-            // Redirigir a la página de creación de usuarios
-            Response.Redirect("AltaUsuarios2.aspx");
+            // Lógica para crear un nuevo usuario
+            Response.Redirect("~/AltaUsuarios2.aspx"); // Redirige a la página de creación de usuario
         }
 
         protected void btnVerUsuarios_Click(object sender, EventArgs e)

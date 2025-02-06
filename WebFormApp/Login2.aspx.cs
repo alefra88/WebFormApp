@@ -21,26 +21,23 @@ namespace WebFormApp
             string correo = txtCorreo.Text.Trim();
             string contrasena = txtContrasena.Text.Trim();
 
-            // Validación de los campos
             if (string.IsNullOrEmpty(correo) || string.IsNullOrEmpty(contrasena))
             {
                 MostrarAlerta("Por favor ingresa tu correo y contraseña.");
                 return;
             }
 
-            // Validación en la base de datos
             try
             {
-                // Validar las credenciales
-                int? idUsuario = usuariosBLL.ValidarCredenciales(correo, contrasena);
+                // Obtener credenciales
+                var resultado = usuariosBLL.ValidarCredenciales(correo, contrasena);
 
-                if (idUsuario.HasValue)
+                if (resultado.IdUsuario.HasValue)
                 {
-                    // Si las credenciales son correctas, guardar la información del usuario en la sesión
                     Session["UsuarioCorreo"] = correo;
-                    Session["UsuarioId"] = idUsuario.Value;
+                    Session["UsuarioId"] = resultado.IdUsuario.Value;
+                    Session["UsuarioNombre"] = resultado.NombreUsuario; // Guardar nombre en sesión
 
-                    // Redirigir al usuario a la página principal
                     Response.Redirect("~/Default.aspx");
                 }
                 else
@@ -53,6 +50,7 @@ namespace WebFormApp
                 MostrarAlerta("Error al intentar iniciar sesión: " + ex.Message);
             }
         }
+
 
         private void MostrarAlerta(string mensaje)
         {
