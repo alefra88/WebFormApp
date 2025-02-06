@@ -18,28 +18,7 @@
         </asp:GridView>
 
         <hr />
-        <h3>Detalle del Usuario</h3>
-        <div id="usuarioDetalle" runat="server" style="display:none;">
-            <div class="form-group">
-                <label for="txtNombre">Nombre:</label>
-                <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" ReadOnly="True"></asp:TextBox>
-            </div>
-            <div class="form-group">
-                <label for="txtApellidoPaterno">Apellido Paterno:</label>
-                <asp:TextBox ID="txtApellidoPaterno" runat="server" CssClass="form-control" ReadOnly="True"></asp:TextBox>
-            </div>
-            <div class="form-group">
-                <label for="txtApellidoMaterno">Apellido Materno:</label>
-                <asp:TextBox ID="txtApellidoMaterno" runat="server" CssClass="form-control" ReadOnly="True"></asp:TextBox>
-            </div>
-            <div class="form-group">
-                <label for="txtFechaNacimiento">Fecha de Nacimiento:</label>
-                <asp:TextBox ID="txtFechaNacimiento" runat="server" CssClass="form-control" TextMode="Date" ReadOnly="True"></asp:TextBox>
-            </div>
-            <div class="form-group">
-                <label for="txtCorreo">Correo Electrónico:</label>
-                <asp:TextBox ID="txtCorreo" runat="server" CssClass="form-control" ReadOnly="True"></asp:TextBox>
-            </div>
-        </div>
+       
+        
     </div>
 </asp:Content>

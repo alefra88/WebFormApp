@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ENT;
 
-namespace DaL
+namespace DAL
 {
     using System;
     using System.Configuration;
@@ -14,7 +14,7 @@ namespace DaL
 
     public class Conexion
     {
-        private static readonly string cadenaConexion = ConfigurationManager.ConnectionStrings["ConexionBD"].ConnectionString;
+        private static readonly string cadenaConexion = ConfigurationManager.ConnectionStrings["DbCon"].ConnectionString;
 
         public static SqlConnection ObtenerConexion()
         {

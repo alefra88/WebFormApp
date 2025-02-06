@@ -13,18 +13,7 @@ namespace ENT
         {
         }
 
-        public Usuarios(int idUsuario, string nombre, string apellidoPaterno, string apellidoMaterno, DateTime fechaNacimiento, string correoElectronico, byte[] contrasenaHash, byte[] salt, DateTime fechaRegistro)
-        {
-            IdUsuario = idUsuario;
-            Nombre = nombre;
-            ApellidoPaterno = apellidoPaterno;
-            ApellidoMaterno = apellidoMaterno;
-            FechaNacimiento = fechaNacimiento;
-            CorreoElectronico = correoElectronico;
-            ContrasenaHash = contrasenaHash;
-            Salt = salt;
-            FechaRegistro = fechaRegistro;
-        }
+        
 
         public int IdUsuario { get; set; }
         public string Nombre { get; set; }
