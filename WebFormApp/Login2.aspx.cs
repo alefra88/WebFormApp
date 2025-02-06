@@ -32,16 +32,18 @@ namespace WebFormApp
                 // Obtener credenciales
                 var resultado = usuariosBLL.ValidarCredenciales(correo, contrasena);
 
-                if (resultado.IdUsuario.HasValue)
+                if (resultado.IdUsuario.HasValue) // Solo se accede si las credenciales son correctas
                 {
+                    // Guardar datos en sesión
                     Session["UsuarioCorreo"] = correo;
                     Session["UsuarioId"] = resultado.IdUsuario.Value;
-                    Session["UsuarioNombre"] = resultado.NombreUsuario; // Guardar nombre en sesión
+                    Session["UsuarioNombre"] = resultado.NombreUsuario;
 
                     Response.Redirect("~/Default.aspx");
                 }
                 else
                 {
+                    // Si las credenciales son incorrectas
                     MostrarAlerta("Correo o contraseña incorrectos.");
                 }
             }
@@ -50,7 +52,6 @@ namespace WebFormApp
                 MostrarAlerta("Error al intentar iniciar sesión: " + ex.Message);
             }
         }
-
 
         private void MostrarAlerta(string mensaje)
         {

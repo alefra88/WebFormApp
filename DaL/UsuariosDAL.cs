@@ -29,7 +29,7 @@ namespace DAL
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@CorreoElectronico", correo);
-                    cmd.Parameters.AddWithValue("@Contrasena", claveDefault);
+                    cmd.Parameters.AddWithValue("@Contrasena", contrasena);
                     cmd.Parameters.AddWithValue("@FraseSecreta", fraseSecreta); 
 
                     con.Open();
